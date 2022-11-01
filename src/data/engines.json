@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ef859b2335ec734f6243e7c741d2c5e6",
+    "years": ["2022", "2023", "2024", "2025"],
+    "induction": ["natural", "forced"],
+    "number_of_pistons": 6,
+    "layout": "V",
+    "bank_angle": 90.0,
+    "max_displacement": [1.6, 1.6],
+    "rev_limit": null
+  },
+  {
+    "id": "02584497de1106df06fbae4be54fcfef",
+    "years": ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
+    "induction": ["natural", "forced"],
+    "number_of_pistons": 6,
+    "layout": "V",
+    "bank_angle": 90.0,
+    "max_displacement": [1.6, 1.6],
+    "rev_limit": 15000
+  },
+  {
+    "id": "7278ac6d56887e475fda86802c5b36a1",
+    "years": ["2009", "2010", "2011", "2012", "2013"],
+    "induction": ["natural"],
+    "number_of_pistons": 8,
+    "layout": "V",
+    "bank_angle": 90.0,
+    "max_displacement": [2.4],
+    "rev_limit": 18000
+  },
+  {
+    "id": "1d7b378c6f36b418168978807390b335",
+    "years": ["2007", "2008"],
+    "induction": ["natural"],
+    "number_of_pistons": 8,
+    "layout": "V",
+    "bank_angle": 90.0,
+    "max_displacement": [2.4],
+    "rev_limit": 19000
+  },
+  {
+    "id": "a43a418fe0720efde1437cc91474e9e8",
+    "years": ["2006"],
+    "induction": ["natural"],
+    "number_of_pistons": 8,
+    "layout": "V",
+    "bank_angle": 90.0,
+    "max_displacement": [2.4],
+    "rev_limit": null
+  },
+  {
+    "id": "65ff168b9d8281dc8405d78f27b9a2b1",
+    "years": ["2000", "2001", "2002", "2003", "2004", "2005"],
+    "induction": ["natural"],
+    "number_of_pistons": 10,
+    "layout": "V",
+    "bank_angle": null,
+    "max_displacement": [3.0],
+    "rev_limit": null
+  },
+  {
+    "id": "1f13eba6b0d5a20086acb77bd8b98f4d",
+    "years": ["1995", "1996", "1997", "1998", "1999"],
+    "induction": ["natural"],
+    "number_of_pistons": 12,
+    "layout": "V",
+    "bank_angle": null,
+    "max_displacement": [3.0],
+    "rev_limit": null
+  }
+]
