@@ -1,8 +1,18 @@
+# Lab 1
+
 # Description
 
-Dataset of F1 cars that were driven by the drivers who won the drivers championship that year. Dataset covers F1 cars from year 1995 to 2020.
-
-
+| Title | Winning F1 cars by year |
+| --- | --- |
+| URI | https://github.com/doms99/OR.git |
+| Keywords | F1, cars, engines, racing |
+| Publication date | 2022-11-01 |
+| Publisher | Dominik Mandić |
+| Creator | Dominik <dominik.mandic@fer.hr> |
+| Period that the dataset covers | 1995-2020 |
+| Theme | F1 |
+| Language | English |
+| Current version | 1.0 |
 
 # Car object
 
