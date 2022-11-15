@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+
+</head>
+<body>
+  <div style="display: flex; align-items: flex-end; flex-direction: column;">
+    <label for="columns">Filter on column:</label>
+
+    <select id="select" name="columns" id="cars">
+      <option value="all">All</option>
+      <option value="engine-id">Engine id</option>
+      <option value="engine-years">Regulation years</option>
+      <option value="engine-induction">Induction</option>
+      <option value="engine-number_of_pistons">Number of pistons</option>
+      <option value="engine-layout">Layout</option>
+      <option value="engine-bank_angle">Bank angle</option>
+      <option value="engine-max_displacement">Max displacement</option>
+      <option value="engine-rev_limit">Rev limit</option>
+      <option value="id">Car id</option>
+      <option value="team">Team</option>
+      <option value="year">Year</option>
+      <option value="length">Length (mm)</option>
+      <option value="width">Width (mm)</option>
+      <option value="height">Height (mm)</option>
+      <option value="weight">Weight (kg)</option>
+      <option value="tyre">Tyre</option>
+    </select>
+
+    <label for="search">Search:</label>
+    <input type="text" id="search" name="search">
+  </div>
+  <table id="table_id" class="display">
+    <thead>
+        <tr>
+          <th>Engine id</th>
+          <th>Regulation year</th>
+          <th>Induction</th>
+          <th>Number of pistons</th>
+          <th>Layout</th>
+          <th>Bank angle</th>
+          <th>Max displacement</th>
+          <th>Rev limit</th>
+          <th>Car id</th>
+          <th>Team</th>
+          <th>Year</th>
+          <th>Length (mm)</th>
+          <th>Width (mm)</th>
+          <th>Height (mm)</th>
+          <th>Weight (kg)</th>
+          <th>Tyre</th>
+        </tr>
+    </thead>
+  </table>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
+  <script type="text/javascript">
+    async function fetchData() {
+      var select = $('#select').val();
+      var search = $('#search').val();
+
+      if(search.trim() == "") return await (await fetch("/datatable/data")).json();
+
+      const response = await fetch("/datatable/data?" + new URLSearchParams({
+        [select]: search,
+      }));
+
+      return await response.json();
+    }
+
+    $(document).ready(async function () {
+      const table = $('#table_id').DataTable({
+        processing: true,
+        sDom:"ltipr",
+        data: await fetchData(),
+        paging: true,
+        columns: [
+          { data: 'engine_regulation.id' },
+          { data: 'engine_regulation.years[, ]' },
+          { data: 'engine_regulation.induction[, ]' },
+          { data: 'engine_regulation.number_of_pistons' },
+          { data: 'engine_regulation.layout' },
+          { data: 'engine_regulation.bank_angle' },
+          { data: 'engine_regulation.max_displacement[, ]' },
+          { data: 'engine_regulation.rev_limit' },
+          { data: 'id' },
+          { data: 'team' },
+          { data: 'year' },
+          { data: 'length' },
+          { data: 'width' },
+          { data: 'height' },
+          { data: 'weight' },
+          { data: 'tyre' },
+        ],
+
+      });
+
+      $('#select').change(async function () {
+        const res = await fetchData();
+
+        table.clear();
+        table.rows.add(res).draw();
+      });
+      $('#search').keyup(async function () {
+        const res = await fetchData();
+
+        table.clear();
+        table.rows.add(res).draw();
+
+      });
+    });
+  </script>
+</body>
+</html>

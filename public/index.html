@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <a href="/data/f1_winning_cars_by_year.csv">CSV</a><br/>
+  <a href="/data/f1_winning_cars_by_year.json">JSON</a>
+
+  <h1 id="lab-1">Lab 1</h1>
+  <h1 id="description">Description</h1>
+  <table>
+  <thead>
+  <tr>
+  <th>Title</th>
+  <th>Winning F1 cars by year</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>URI</td>
+  <td><a href="https://github.com/doms99/OR.git">https://github.com/doms99/OR.git</a></td>
+  </tr>
+  <tr>
+  <td>Keywords</td>
+  <td>F1, cars, engines, racing</td>
+  </tr>
+  <tr>
+  <td>Publication date</td>
+  <td>2022-11-01</td>
+  </tr>
+  <tr>
+  <td>Publisher</td>
+  <td>Dominik Mandić</td>
+  </tr>
+  <tr>
+  <td>Creator</td>
+  <td>Dominik <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#100;&#111;&#x6d;&#x69;&#110;&#x69;&#x6b;&#x2e;&#x6d;&#x61;&#110;&#x64;&#x69;&#99;&#64;&#x66;&#101;&#x72;&#x2e;&#104;&#x72;">&#100;&#111;&#x6d;&#x69;&#110;&#x69;&#x6b;&#x2e;&#x6d;&#x61;&#110;&#x64;&#x69;&#99;&#64;&#x66;&#101;&#x72;&#x2e;&#104;&#x72;</a></td>
+  </tr>
+  <tr>
+  <td>Period that the dataset covers</td>
+  <td>1995-2020</td>
+  </tr>
+  <tr>
+  <td>Theme</td>
+  <td>F1</td>
+  </tr>
+  <tr>
+  <td>Language</td>
+  <td>English</td>
+  </tr>
+  <tr>
+  <td>Current version</td>
+  <td>1.0</td>
+  </tr>
+  </tbody>
+  </table>
+  <h1 id="car-object">Car object</h1>
+  <h2 id="json-data-format">JSON data format</h2>
+  <pre><code class="lang-json">
+  {
+    <span class="hljs-attr">"id"</span>: string,
+    <span class="hljs-attr">"team"</span>: string,
+    <span class="hljs-attr">"year"</span>: string,
+    <span class="hljs-attr">"engine_regulation"</span>: engine_regulation_object,
+    <span class="hljs-attr">"tyre"</span>: string,
+    <span class="hljs-attr">"length"</span>: double || <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"width"</span>: double || <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"height"</span>: double || <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"weight"</span>: double || <span class="hljs-literal">null</span>
+  }
+  </code></pre>
+  <h2 id="fields">Fields</h2>
+  <h3 id="id-string-">id <code>string</code></h3>
+  <p>Unique id of that object.</p>
+  <h3 id="team-string-">team <code>string</code></h3>
+  <p>Team name of winning car.</p>
+  <h3 id="year-string-">year <code>string</code></h3>
+  <p>Year that car won the championship.</p>
+  <h3 id="engine_regulation-engine_regulation_object-">engine_regulation <code>engine_regulation_object</code></h3>
+  <p>Engine regulation object.</p>
+  <h3 id="tyre-string-">tyre <code>string</code></h3>
+  <p>Name of the tyre manufacturer.</p>
+  <h3 id="length-double-null-">length <code>double || null</code></h3>
+  <p>Length of the car if available.</p>
+  <h3 id="width-double-null-">width <code>double || null</code></h3>
+  <p>Width of the car if available.</p>
+  <h3 id="height-double-null-">height <code>double || null</code></h3>
+  <p>Height of the car if available.</p>
+  <h3 id="weight-double-null-">weight <code>double || null</code></h3>
+  <p>Weight of the car if available.</p>
+  <h1 id="engine-regulation-object">Engine regulation object</h1>
+  <h2 id="json-data-format">JSON data format</h2>
+  <pre><code class="lang-json">{
+    <span class="hljs-attr">"id"</span>: string,
+    <span class="hljs-attr">"years"</span>: string[],
+    <span class="hljs-attr">"induction"</span>: string[],
+    <span class="hljs-attr">"number_of_pistons"</span>: int,
+    <span class="hljs-attr">"layout"</span>: string,
+    <span class="hljs-attr">"bank_angle"</span>: double || <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"max_displacement"</span>: double[],
+    <span class="hljs-attr">"rev_limit"</span>: int || <span class="hljs-literal">null</span>
+  }
+  </code></pre>
+  <h2 id="fields">Fields</h2>
+  <h3 id="id-string-">id <code>string</code></h3>
+  <p>Unique id of that object.</p>
+  <h3 id="years-string-">years <code>string[]</code></h3>
+  <p>List of years this regulation was in effect.</p>
+  <h3 id="induction-string-">induction <code>string[]</code></h3>
+  <p>Array of types of inductions that are allowed.
+  Possible values in array: <code>natural</code>, <code>forced</code>.</p>
+  <h3 id="number_of_pistons-int-">number_of_pistons <code>int</code></h3>
+  <p>Number of pistons allowed.</p>
+  <h3 id="layout-string-">layout <code>string</code></h3>
+  <p>Engine piston layout.
+  Possible values: <code>I</code> (<strong>**</strong>Inline<strong>**</strong>), <code>V</code> (<strong>**</strong>V shape<strong>**</strong>).</p>
+  <h3 id="bank_angle-double-null-">bank_angle <code>double || null</code></h3>
+  <p>Angle between banks of pistons.
+  <code>null</code> if regulations didn’t specify the angle.</p>
+  <h3 id="max_displacement-double-">max_displacement <code>double[]</code></h3>
+  <p>Array of maximum allowed displacement specified by regulations for each induction type
+  specified in the <code>induction</code> array field.</p>
+  <h3 id="rev_limit-double-null-">rev_limit <code>double || null</code></h3>
+  <p>Max engine revolution per minute. <code>null</code> if not specified by regulation.</p>
+</body>
+</html>

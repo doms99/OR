@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "array",
+  "default": [],
+  "title": "Winning F1 car by season",
+  "items": {
+      "type": "object",
+      "title": "F1 Car",
+      "description": "Winning car of the season of F1",
+      "required": [
+          "id",
+          "team",
+          "year",
+          "engine_regulation",
+          "length",
+          "width",
+          "height",
+          "weight",
+          "tyre"
+      ],
+      "properties": {
+          "id": {
+              "type": "string",
+              "title": "Car id",
+              "description": "Unique car id"
+          },
+          "team": {
+              "type": "string",
+              "title": "Winning team name",
+              "description": "Winning team name"
+
+          },
+          "year": {
+              "type": "string",
+              "title": "Season year",
+              "description": "Year the season was held in"
+          },
+          "engine_regulation": {
+              "type": "object",
+              "title": "Engine regulation",
+              "description": "Engine regulation winning car was built by",
+              "required": [
+                  "id",
+                  "years",
+                  "induction",
+                  "number_of_pistons",
+                  "layout",
+                  "bank_angle",
+                  "max_displacement",
+                  "rev_limit"
+              ],
+              "properties": {
+                  "id": {
+                      "type": "string",
+                      "title": "Car id",
+                      "description": "Unique engine regulation id"
+                  },
+                  "years": {
+                      "type": "array",
+                      "title": "Active years",
+                      "description": "Years regulation was active in",
+                      "items": {
+                          "type": "string",
+                          "title": "Years"
+                      }
+
+                  },
+                  "induction": {
+                      "type": "array",
+                      "title": "Engine induction",
+                      "description": "Induction method engine were allowed to use",
+                      "items": {
+                          "type": "string",
+                          "title": "Induction method"
+                      }
+
+                  },
+                  "number_of_pistons": {
+                      "type": "integer",
+                      "title": "Number of pistons",
+                      "description": "Number of pistons engines were allowed to have"
+
+                  },
+                  "layout": {
+                      "type": "string",
+                      "title": "Engine layout",
+                      "description": "Allowed engine layout"
+
+                  },
+                  "bank_angle": {
+                      "type": [
+                          "number",
+                          "null"
+                      ],
+                      "title": "Engine bank angle",
+                      "description": "Allowed engine bank angle"
+
+                  },
+                  "max_displacement": {
+                      "type": "array",
+                      "title": "Engine max displacement",
+                      "description": "Maximum allowed displacement of the engine",
+                      "items": {
+                          "type": "number",
+                          "title": "F1 Car Schema"
+
+                      }
+
+                  },
+                  "rev_limit": {
+                      "type": [
+                          "integer",
+                          "null"
+                      ],
+                      "title": "Rev limit",
+                      "description": "Engine RMP limit"
+                  }
+              }
+          },
+          "length": {
+              "type": [
+                  "number",
+                  "null"
+              ],
+              "title": "Car length",
+              "description": "Car length"
+          },
+          "width": {
+              "type": [
+                  "number",
+                  "null"
+              ],
+              "title": "Car width",
+              "description": "Car width"
+          },
+          "height": {
+              "type": [
+                  "number",
+                  "null"
+              ],
+              "title": "Car height",
+              "description": "Car height"
+          },
+          "weight": {
+              "type": [
+                  "number",
+                  "null"
+              ],
+              "title": "Car weight",
+              "description": "Car weight"
+          },
+          "tyre": {
+              "type": "string",
+              "title": "Tyre manufacturer",
+              "description": "Tyre manufacturer winning car used"
+          }
+      }
+  }
+}
