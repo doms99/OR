@@ -1,4 +1,4 @@
-var { MongoClient, Db } = require('mongodb');
+var { MongoClient } = require('mongodb');
 var constants = require('../constants/constants.json');
 
 let client;

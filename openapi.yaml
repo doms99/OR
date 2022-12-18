@@ -1,0 +1,572 @@
+openapi: 3.0.3
+info:
+  title: F1 Winners
+  description: F1 winner cars by years and engine regulations
+  contact:
+    email: dominik.mandic@fer.hr
+  license:
+    name: CC0 1.0 Universal
+  version: 1.0.0
+externalDocs:
+  description: Find out more about F1 Winners
+  url: http://localhost:3000/
+servers:
+- url: http://localhost:3000/api/v1
+tags:
+- name: cars
+  description: Everything about winning F1 cars
+- name: engines
+  description: Everything about F1 cars regulations
+- name: spec
+  description: API specification
+paths:
+  /cars:
+    get:
+      tags:
+      - cars
+      summary: All F1 cars in the dataset
+      description: Returns a list of cars
+      operationId: getCars
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+        "406":
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cars
+    post:
+      tags:
+      - cars
+      summary: Add new car to dataset
+      description: Add new car to dataset
+      operationId: addCar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequest'
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+        "406":
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "415":
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cars
+  /cars/{carId}:
+    get:
+      tags:
+      - cars
+      summary: Find car by ID
+      description: Returns a single car
+      operationId: getCarById
+      parameters:
+      - name: carId
+        in: path
+        description: ID of car to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: utf8
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarsResponse'
+        "404":
+          description: Car with ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cars
+    put:
+      tags:
+      - cars
+      summary: Add new car to dataset
+      description: Add new car to dataset
+      operationId: updateCar
+      parameters:
+      - name: carId
+        in: path
+        description: ID of car to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: utf8
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+        "404":
+          description: Car with ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "406":
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "415":
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cars
+    delete:
+      tags:
+      - cars
+      summary: Delete car
+      description: Delete car from the dataset
+      operationId: deleteCar
+      parameters:
+      - name: carId
+        in: path
+        description: ID of car to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: utf8
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptySuccess'
+        "404":
+          description: Car with ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cars
+  /engines:
+    get:
+      tags:
+      - engines
+      summary: All F1 engine regulations in the dataset
+      description: Returns a list of engine regulations
+      operationId: getEngines
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnginesResponse'
+        "406":
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "415":
+          description: Not acceptable (for content type)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Engines
+  /engines/{engineId}:
+    get:
+      tags:
+      - engines
+      summary: Find engine regulation by ID
+      description: Returns a single engine regulation
+      operationId: getEngineById
+      parameters:
+      - name: engineId
+        in: path
+        description: ID of engine to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: utf8
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnginesResponse'
+        "406":
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "415":
+          description: Not acceptable (for content type)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Engines
+  /engines/{engineId}/cars:
+    get:
+      tags:
+      - engines
+      summary: Find cars that use engine regulation with given ID
+      description: Returns a list of cars with that engine regulation
+      operationId: getCarsWithEngineByEngineId
+      parameters:
+      - name: engineId
+        in: path
+        description: ID of engine to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: utf8
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarsResponse'
+        "406":
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "415":
+          description: Not acceptable (for content type)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Engines
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          type: string
+          nullable: true
+    EmptySuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          type: string
+          nullable: true
+      example:
+        response: response
+        message: message
+        status: status
+    CarsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          type: array
+          items:
+            $ref: '#/components/schemas/Car'
+      example:
+        response:
+        - year: year
+          engine_regulation:
+            layout: layout
+            max_displacement:
+            - 1.46581298050294517310021547018550336360931396484375
+            - 1.46581298050294517310021547018550336360931396484375
+            rev_limit: 5.962133916683182377482808078639209270477294921875
+            induction:
+            - forced
+            - forced
+            id: id
+            number_of_pistons: 0.80082819046101150206595775671303272247314453125
+            years:
+            - years
+            - years
+            bank_angle: 6.02745618307040320615897144307382404804229736328125
+          length: 5.63737665663332876420099637471139430999755859375
+          width: 2.3021358869347654518833223846741020679473876953125
+          weight: 9.301444243932575517419536481611430644989013671875
+          id: id
+          team: team
+          tyre: tyre
+          height: 7.061401241503109105224211816675961017608642578125
+        - year: year
+          engine_regulation:
+            layout: layout
+            max_displacement:
+            - 1.46581298050294517310021547018550336360931396484375
+            - 1.46581298050294517310021547018550336360931396484375
+            rev_limit: 5.962133916683182377482808078639209270477294921875
+            induction:
+            - forced
+            - forced
+            id: id
+            number_of_pistons: 0.80082819046101150206595775671303272247314453125
+            years:
+            - years
+            - years
+            bank_angle: 6.02745618307040320615897144307382404804229736328125
+          length: 5.63737665663332876420099637471139430999755859375
+          width: 2.3021358869347654518833223846741020679473876953125
+          weight: 9.301444243932575517419536481611430644989013671875
+          id: id
+          team: team
+          tyre: tyre
+          height: 7.061401241503109105224211816675961017608642578125
+        message: message
+        status: status
+    CarResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          $ref: '#/components/schemas/Car'
+      example:
+        response:
+          year: year
+          engine_regulation:
+            layout: layout
+            max_displacement:
+            - 1.46581298050294517310021547018550336360931396484375
+            - 1.46581298050294517310021547018550336360931396484375
+            rev_limit: 5.962133916683182377482808078639209270477294921875
+            induction:
+            - forced
+            - forced
+            id: id
+            number_of_pistons: 0.80082819046101150206595775671303272247314453125
+            years:
+            - years
+            - years
+            bank_angle: 6.02745618307040320615897144307382404804229736328125
+          length: 5.63737665663332876420099637471139430999755859375
+          width: 2.3021358869347654518833223846741020679473876953125
+          weight: 9.301444243932575517419536481611430644989013671875
+          id: id
+          team: team
+          tyre: tyre
+          height: 7.061401241503109105224211816675961017608642578125
+        message: message
+        status: status
+    CarRequest:
+      type: object
+      properties:
+        team:
+          type: string
+        year:
+          type: string
+        length:
+          type: number
+        width:
+          type: number
+        height:
+          type: number
+        weight:
+          type: number
+        tyre:
+          type: string
+    Car:
+      type: object
+      properties:
+        id:
+          type: string
+        team:
+          type: string
+        year:
+          type: string
+        engine_regulation:
+          $ref: '#/components/schemas/Engine'
+        length:
+          type: number
+        width:
+          type: number
+        height:
+          type: number
+        weight:
+          type: number
+        tyre:
+          type: string
+      example:
+        year: year
+        engine_regulation:
+          layout: layout
+          max_displacement:
+          - 1.46581298050294517310021547018550336360931396484375
+          - 1.46581298050294517310021547018550336360931396484375
+          rev_limit: 5.962133916683182377482808078639209270477294921875
+          induction:
+          - forced
+          - forced
+          id: id
+          number_of_pistons: 0.80082819046101150206595775671303272247314453125
+          years:
+          - years
+          - years
+          bank_angle: 6.02745618307040320615897144307382404804229736328125
+        length: 5.63737665663332876420099637471139430999755859375
+        width: 2.3021358869347654518833223846741020679473876953125
+        weight: 9.301444243932575517419536481611430644989013671875
+        id: id
+        team: team
+        tyre: tyre
+        height: 7.061401241503109105224211816675961017608642578125
+    EngineResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          $ref: '#/components/schemas/Engine'
+    EnginesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          type: array
+          items:
+            $ref: '#/components/schemas/Engine'
+      example:
+        response:
+        - layout: layout
+          max_displacement:
+          - 1.46581298050294517310021547018550336360931396484375
+          - 1.46581298050294517310021547018550336360931396484375
+          rev_limit: 5.962133916683182377482808078639209270477294921875
+          induction:
+          - forced
+          - forced
+          id: id
+          number_of_pistons: 0.80082819046101150206595775671303272247314453125
+          years:
+          - years
+          - years
+          bank_angle: 6.02745618307040320615897144307382404804229736328125
+        - layout: layout
+          max_displacement:
+          - 1.46581298050294517310021547018550336360931396484375
+          - 1.46581298050294517310021547018550336360931396484375
+          rev_limit: 5.962133916683182377482808078639209270477294921875
+          induction:
+          - forced
+          - forced
+          id: id
+          number_of_pistons: 0.80082819046101150206595775671303272247314453125
+          years:
+          - years
+          - years
+          bank_angle: 6.02745618307040320615897144307382404804229736328125
+        message: message
+        status: status
+    Engine:
+      type: object
+      properties:
+        id:
+          type: string
+        years:
+          type: array
+          items:
+            type: string
+        induction:
+          type: array
+          items:
+            type: string
+            enum:
+            - forced
+            - natural
+        number_of_pistons:
+          type: number
+        layout:
+          type: string
+        bank_angle:
+          type: number
+        max_displacement:
+          type: array
+          items:
+            type: number
+        rev_limit:
+          type: number
+          nullable: true
+      example:
+        layout: layout
+        max_displacement:
+        - 1.46581298050294517310021547018550336360931396484375
+        - 1.46581298050294517310021547018550336360931396484375
+        rev_limit: 5.962133916683182377482808078639209270477294921875
+        induction:
+        - forced
+        - forced
+        id: id
+        number_of_pistons: 0.80082819046101150206595775671303272247314453125
+        years:
+        - years
+        - years
+        bank_angle: 6.02745618307040320615897144307382404804229736328125

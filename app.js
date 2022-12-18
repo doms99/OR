@@ -7,7 +7,12 @@ var { connectToDb } = require("./db/db");
 
 var indexRouter = require('./routes/index');
 var datatableRouter = require('./routes/datatable');
-
+var apiRouter = require('./routes/api/api');
+const { sendErrorResponse } = require('./routes/api/util/responseBuilder');
+var {
+	ReasonPhrases,
+	StatusCodes
+} = require('http-status-codes');
 var app = express();
 
 // view engine setup
@@ -23,10 +28,15 @@ app.use(express.static(path.join(__dirname, 'public', 'datatable')));
 
 app.use('/', indexRouter);
 app.use('/datatable', datatableRouter);
+app.use('/api/v1', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  sendErrorResponse(res, {
+    statusCode: StatusCodes.NOT_FOUND,
+    responseStatus: ReasonPhrases.NOT_FOUND,
+    message: `Not found ${req.url}`
+  });
 });
 
 // error handler
@@ -36,8 +46,11 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  sendErrorResponse(res, {
+    statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+    responseStatus: ReasonPhrases.INTERNAL_SERVER_ERROR,
+    message: `Internal server error`
+  })
 });
 
 (async function() {
