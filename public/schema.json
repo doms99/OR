@@ -115,6 +115,16 @@
                       ],
                       "title": "Rev limit",
                       "description": "Engine RMP limit"
+                  },
+                  "engineDisplacement": {
+                      "type": ["number", "null"],
+                      "title": "Typical engine displacement",
+                      "description": "Typical engine displacement"
+                  },
+                  "engineType": {
+                      "type": "string",
+                      "title": "Typical engine type",
+                      "description": "Typical engine type"
                   }
               }
           },
@@ -154,6 +164,14 @@
               "type": "string",
               "title": "Tyre manufacturer",
               "description": "Tyre manufacturer winning car used"
+          },
+          "wheelbase": {
+              "type": [
+                  "number",
+                  "null"
+              ],
+              "title": "Wheelbase",
+              "description": "Wheelbase"
           }
       }
   }

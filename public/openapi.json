@@ -9,7 +9,7 @@
     "license": {
       "name": "CC0 1.0 Universal"
     },
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "externalDocs": {
     "description": "Find out more about F1 Winners",
@@ -32,9 +32,96 @@
     {
       "name": "spec",
       "description": "API specification"
+    },
+    {
+      "name": "auth",
+      "description": "Twitter OAuth2.0"
     }
   ],
   "paths": {
+    "/login": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Twitter OAuth2.0 flow entry point",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "displayName": {
+                          "type": "string"
+                        },
+                        "token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Twitter OAuth2.0 logout",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/spec": {
       "get": {
         "tags": [
@@ -70,7 +157,114 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CarResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "team": {
+                          "type": "string"
+                        },
+                        "year": {
+                          "type": "string"
+                        },
+                        "engine_regulation": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "years": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "induction": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "forced",
+                                  "natural"
+                                ]
+                              }
+                            },
+                            "number_of_pistons": {
+                              "type": "number",
+                              "examples": [
+                                12
+                              ]
+                            },
+                            "layout": {
+                              "type": "string"
+                            },
+                            "bank_angle": {
+                              "type": "number",
+                              "examples": [
+                                90
+                              ]
+                            },
+                            "engineDisplacement": {
+                              "type": "number",
+                              "examples": [
+                                1.6
+                              ]
+                            },
+                            "engineType": {
+                              "type": "string",
+                              "examples": [
+                                "forced or natural"
+                              ]
+                            },
+                            "max_displacement": {
+                              "type": "array",
+                              "examples": [
+                                2.6
+                              ],
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            "rev_limit": {
+                              "type": "number",
+                              "examples": [
+                                19000
+                              ],
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "length": {
+                          "type": "number"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "weight": {
+                          "type": "number"
+                        },
+                        "tyre": {
+                          "type": "string"
+                        },
+                        "wheelbase": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -80,7 +274,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -98,7 +307,30 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CarRequest"
+                "type": "object",
+                "properties": {
+                  "team": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "string"
+                  },
+                  "length": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "weight": {
+                    "type": "number"
+                  },
+                  "tyre": {
+                    "type": "string"
+                  }
+                }
               }
             }
           },
@@ -110,7 +342,114 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CarResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "team": {
+                          "type": "string"
+                        },
+                        "year": {
+                          "type": "string"
+                        },
+                        "engine_regulation": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "years": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "induction": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "forced",
+                                  "natural"
+                                ]
+                              }
+                            },
+                            "number_of_pistons": {
+                              "type": "number",
+                              "examples": [
+                                12
+                              ]
+                            },
+                            "layout": {
+                              "type": "string"
+                            },
+                            "bank_angle": {
+                              "type": "number",
+                              "examples": [
+                                90
+                              ]
+                            },
+                            "engineDisplacement": {
+                              "type": "number",
+                              "examples": [
+                                1.6
+                              ]
+                            },
+                            "engineType": {
+                              "type": "string",
+                              "examples": [
+                                "forced or natural"
+                              ]
+                            },
+                            "max_displacement": {
+                              "type": "array",
+                              "examples": [
+                                2.6
+                              ],
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            "rev_limit": {
+                              "type": "number",
+                              "examples": [
+                                19000
+                              ],
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "length": {
+                          "type": "number"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "weight": {
+                          "type": "number"
+                        },
+                        "tyre": {
+                          "type": "string"
+                        },
+                        "wheelbase": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -120,7 +459,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -130,7 +484,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -164,7 +533,117 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CarsResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "team": {
+                            "type": "string"
+                          },
+                          "year": {
+                            "type": "string"
+                          },
+                          "engine_regulation": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "years": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "induction": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "forced",
+                                    "natural"
+                                  ]
+                                }
+                              },
+                              "number_of_pistons": {
+                                "type": "number",
+                                "examples": [
+                                  12
+                                ]
+                              },
+                              "layout": {
+                                "type": "string"
+                              },
+                              "bank_angle": {
+                                "type": "number",
+                                "examples": [
+                                  90
+                                ]
+                              },
+                              "engineDisplacement": {
+                                "type": "number",
+                                "examples": [
+                                  1.6
+                                ]
+                              },
+                              "engineType": {
+                                "type": "string",
+                                "examples": [
+                                  "forced or natural"
+                                ]
+                              },
+                              "max_displacement": {
+                                "type": "array",
+                                "examples": [
+                                  2.6
+                                ],
+                                "items": {
+                                  "type": "number"
+                                }
+                              },
+                              "rev_limit": {
+                                "type": "number",
+                                "examples": [
+                                  19000
+                                ],
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "length": {
+                            "type": "number"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "weight": {
+                            "type": "number"
+                          },
+                          "tyre": {
+                            "type": "string"
+                          },
+                          "wheelbase": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -174,7 +653,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -184,7 +678,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -214,7 +723,30 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CarRequest"
+                "type": "object",
+                "properties": {
+                  "team": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "string"
+                  },
+                  "length": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "weight": {
+                    "type": "number"
+                  },
+                  "tyre": {
+                    "type": "string"
+                  }
+                }
               }
             }
           },
@@ -226,7 +758,114 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CarResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "team": {
+                          "type": "string"
+                        },
+                        "year": {
+                          "type": "string"
+                        },
+                        "engine_regulation": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "years": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "induction": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "forced",
+                                  "natural"
+                                ]
+                              }
+                            },
+                            "number_of_pistons": {
+                              "type": "number",
+                              "examples": [
+                                12
+                              ]
+                            },
+                            "layout": {
+                              "type": "string"
+                            },
+                            "bank_angle": {
+                              "type": "number",
+                              "examples": [
+                                90
+                              ]
+                            },
+                            "engineDisplacement": {
+                              "type": "number",
+                              "examples": [
+                                1.6
+                              ]
+                            },
+                            "engineType": {
+                              "type": "string",
+                              "examples": [
+                                "forced or natural"
+                              ]
+                            },
+                            "max_displacement": {
+                              "type": "array",
+                              "examples": [
+                                2.6
+                              ],
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            "rev_limit": {
+                              "type": "number",
+                              "examples": [
+                                19000
+                              ],
+                              "nullable": true
+                            }
+                          }
+                        },
+                        "length": {
+                          "type": "number"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "weight": {
+                          "type": "number"
+                        },
+                        "tyre": {
+                          "type": "string"
+                        },
+                        "wheelbase": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -236,7 +875,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -246,7 +900,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -256,7 +925,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -288,7 +972,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmptySuccess"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -298,7 +997,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -320,7 +1034,85 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EnginesResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "years": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "induction": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "forced",
+                                "natural"
+                              ]
+                            }
+                          },
+                          "number_of_pistons": {
+                            "type": "number",
+                            "examples": [
+                              12
+                            ]
+                          },
+                          "layout": {
+                            "type": "string"
+                          },
+                          "bank_angle": {
+                            "type": "number",
+                            "examples": [
+                              90
+                            ]
+                          },
+                          "engineDisplacement": {
+                            "type": "number",
+                            "examples": [
+                              1.6
+                            ]
+                          },
+                          "engineType": {
+                            "type": "string",
+                            "examples": [
+                              "forced or natural"
+                            ]
+                          },
+                          "max_displacement": {
+                            "type": "array",
+                            "examples": [
+                              2.6
+                            ],
+                            "items": {
+                              "type": "number"
+                            }
+                          },
+                          "rev_limit": {
+                            "type": "number",
+                            "examples": [
+                              19000
+                            ],
+                            "nullable": true
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -330,7 +1122,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -340,7 +1147,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -374,7 +1196,85 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EnginesResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "years": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "induction": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "forced",
+                                "natural"
+                              ]
+                            }
+                          },
+                          "number_of_pistons": {
+                            "type": "number",
+                            "examples": [
+                              12
+                            ]
+                          },
+                          "layout": {
+                            "type": "string"
+                          },
+                          "bank_angle": {
+                            "type": "number",
+                            "examples": [
+                              90
+                            ]
+                          },
+                          "engineDisplacement": {
+                            "type": "number",
+                            "examples": [
+                              1.6
+                            ]
+                          },
+                          "engineType": {
+                            "type": "string",
+                            "examples": [
+                              "forced or natural"
+                            ]
+                          },
+                          "max_displacement": {
+                            "type": "array",
+                            "examples": [
+                              2.6
+                            ],
+                            "items": {
+                              "type": "number"
+                            }
+                          },
+                          "rev_limit": {
+                            "type": "number",
+                            "examples": [
+                              19000
+                            ],
+                            "nullable": true
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -384,7 +1284,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -394,7 +1309,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -428,7 +1358,117 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CarsResponse"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "team": {
+                            "type": "string"
+                          },
+                          "year": {
+                            "type": "string"
+                          },
+                          "engine_regulation": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "years": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "induction": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "enum": [
+                                    "forced",
+                                    "natural"
+                                  ]
+                                }
+                              },
+                              "number_of_pistons": {
+                                "type": "number",
+                                "examples": [
+                                  12
+                                ]
+                              },
+                              "layout": {
+                                "type": "string"
+                              },
+                              "bank_angle": {
+                                "type": "number",
+                                "examples": [
+                                  90
+                                ]
+                              },
+                              "engineDisplacement": {
+                                "type": "number",
+                                "examples": [
+                                  1.6
+                                ]
+                              },
+                              "engineType": {
+                                "type": "string",
+                                "examples": [
+                                  "forced or natural"
+                                ]
+                              },
+                              "max_displacement": {
+                                "type": "array",
+                                "examples": [
+                                  2.6
+                                ],
+                                "items": {
+                                  "type": "number"
+                                }
+                              },
+                              "rev_limit": {
+                                "type": "number",
+                                "examples": [
+                                  19000
+                                ],
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "length": {
+                            "type": "number"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "weight": {
+                            "type": "number"
+                          },
+                          "tyre": {
+                            "type": "string"
+                          },
+                          "wheelbase": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -438,7 +1478,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -448,7 +1503,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "response": {
+                      "type": "string",
+                      "examples": [
+                        null
+                      ],
+                      "nullable": true
+                    }
+                  }
                 }
               }
             }
@@ -507,7 +1577,103 @@
           "response": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Car"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "team": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "string"
+                },
+                "engine_regulation": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "years": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "induction": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "forced",
+                          "natural"
+                        ]
+                      }
+                    },
+                    "number_of_pistons": {
+                      "type": "number",
+                      "examples": [
+                        12
+                      ]
+                    },
+                    "layout": {
+                      "type": "string"
+                    },
+                    "bank_angle": {
+                      "type": "number",
+                      "examples": [
+                        90
+                      ]
+                    },
+                    "engineDisplacement": {
+                      "type": "number",
+                      "examples": [
+                        1.6
+                      ]
+                    },
+                    "engineType": {
+                      "type": "string",
+                      "examples": [
+                        "forced or natural"
+                      ]
+                    },
+                    "max_displacement": {
+                      "type": "array",
+                      "examples": [
+                        2.6
+                      ],
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "rev_limit": {
+                      "type": "number",
+                      "examples": [
+                        19000
+                      ],
+                      "nullable": true
+                    }
+                  }
+                },
+                "length": {
+                  "type": "number"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "weight": {
+                  "type": "number"
+                },
+                "tyre": {
+                  "type": "string"
+                },
+                "wheelbase": {
+                  "type": "number"
+                }
+              }
             }
           }
         }
@@ -522,7 +1688,103 @@
             "type": "string"
           },
           "response": {
-            "$ref": "#/components/schemas/Car"
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "team": {
+                "type": "string"
+              },
+              "year": {
+                "type": "string"
+              },
+              "engine_regulation": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "years": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "induction": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "forced",
+                        "natural"
+                      ]
+                    }
+                  },
+                  "number_of_pistons": {
+                    "type": "number",
+                    "examples": [
+                      12
+                    ]
+                  },
+                  "layout": {
+                    "type": "string"
+                  },
+                  "bank_angle": {
+                    "type": "number",
+                    "examples": [
+                      90
+                    ]
+                  },
+                  "engineDisplacement": {
+                    "type": "number",
+                    "examples": [
+                      1.6
+                    ]
+                  },
+                  "engineType": {
+                    "type": "string",
+                    "examples": [
+                      "forced or natural"
+                    ]
+                  },
+                  "max_displacement": {
+                    "type": "array",
+                    "examples": [
+                      2.6
+                    ],
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "rev_limit": {
+                    "type": "number",
+                    "examples": [
+                      19000
+                    ],
+                    "nullable": true
+                  }
+                }
+              },
+              "length": {
+                "type": "number"
+              },
+              "width": {
+                "type": "number"
+              },
+              "height": {
+                "type": "number"
+              },
+              "weight": {
+                "type": "number"
+              },
+              "tyre": {
+                "type": "string"
+              },
+              "wheelbase": {
+                "type": "number"
+              }
+            }
           }
         }
       },
@@ -565,7 +1827,71 @@
             "type": "string"
           },
           "engine_regulation": {
-            "$ref": "#/components/schemas/Engine"
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "years": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "induction": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "forced",
+                    "natural"
+                  ]
+                }
+              },
+              "number_of_pistons": {
+                "type": "number",
+                "examples": [
+                  12
+                ]
+              },
+              "layout": {
+                "type": "string"
+              },
+              "bank_angle": {
+                "type": "number",
+                "examples": [
+                  90
+                ]
+              },
+              "engineDisplacement": {
+                "type": "number",
+                "examples": [
+                  1.6
+                ]
+              },
+              "engineType": {
+                "type": "string",
+                "examples": [
+                  "forced or natural"
+                ]
+              },
+              "max_displacement": {
+                "type": "array",
+                "examples": [
+                  2.6
+                ],
+                "items": {
+                  "type": "number"
+                }
+              },
+              "rev_limit": {
+                "type": "number",
+                "examples": [
+                  19000
+                ],
+                "nullable": true
+              }
+            }
           },
           "length": {
             "type": "number"
@@ -581,6 +1907,9 @@
           },
           "tyre": {
             "type": "string"
+          },
+          "wheelbase": {
+            "type": "number"
           }
         }
       },
@@ -594,7 +1923,71 @@
             "type": "string"
           },
           "response": {
-            "$ref": "#/components/schemas/Engine"
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "years": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "induction": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "forced",
+                    "natural"
+                  ]
+                }
+              },
+              "number_of_pistons": {
+                "type": "number",
+                "examples": [
+                  12
+                ]
+              },
+              "layout": {
+                "type": "string"
+              },
+              "bank_angle": {
+                "type": "number",
+                "examples": [
+                  90
+                ]
+              },
+              "engineDisplacement": {
+                "type": "number",
+                "examples": [
+                  1.6
+                ]
+              },
+              "engineType": {
+                "type": "string",
+                "examples": [
+                  "forced or natural"
+                ]
+              },
+              "max_displacement": {
+                "type": "array",
+                "examples": [
+                  2.6
+                ],
+                "items": {
+                  "type": "number"
+                }
+              },
+              "rev_limit": {
+                "type": "number",
+                "examples": [
+                  19000
+                ],
+                "nullable": true
+              }
+            }
           }
         }
       },
@@ -610,7 +2003,71 @@
           "response": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Engine"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "years": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "induction": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "forced",
+                      "natural"
+                    ]
+                  }
+                },
+                "number_of_pistons": {
+                  "type": "number",
+                  "examples": [
+                    12
+                  ]
+                },
+                "layout": {
+                  "type": "string"
+                },
+                "bank_angle": {
+                  "type": "number",
+                  "examples": [
+                    90
+                  ]
+                },
+                "engineDisplacement": {
+                  "type": "number",
+                  "examples": [
+                    1.6
+                  ]
+                },
+                "engineType": {
+                  "type": "string",
+                  "examples": [
+                    "forced or natural"
+                  ]
+                },
+                "max_displacement": {
+                  "type": "array",
+                  "examples": [
+                    2.6
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "rev_limit": {
+                  "type": "number",
+                  "examples": [
+                    19000
+                  ],
+                  "nullable": true
+                }
+              }
             }
           }
         }
@@ -652,6 +2109,18 @@
               90
             ]
           },
+          "engineDisplacement": {
+            "type": "number",
+            "examples": [
+              1.6
+            ]
+          },
+          "engineType": {
+            "type": "string",
+            "examples": [
+              "forced or natural"
+            ]
+          },
           "max_displacement": {
             "type": "array",
             "examples": [
@@ -665,6 +2134,75 @@
             "type": "number",
             "examples": [
               19000
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "response": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "token": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string",
+            "examples": [
+              null
             ],
             "nullable": true
           }

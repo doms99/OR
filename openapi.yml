@@ -6,7 +6,7 @@ info:
     email: dominik.mandic@fer.hr
   license:
     name: CC0 1.0 Universal
-  version: 1.0.0
+  version: 1.1.0
 externalDocs:
   description: Find out more about F1 Winners
   url: http://localhost:3000/
@@ -19,7 +19,61 @@ tags:
     description: Everything about F1 cars regulations
   - name: spec
     description: API specification
+  - name: auth
+    description: Twitter OAuth2.0
 paths:
+  /login:
+    get:
+      tags:
+        - auth
+      summary: Twitter OAuth2.0 flow entry point
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      provider:
+                        type: string
+                      username:
+                        type: string
+                      displayName:
+                        type: string
+                      token:
+                        type: string
+  /logout:
+    post:
+      tags:
+        - auth
+      summary: Twitter OAuth2.0 logout
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
   /spec:
     get:
       tags:
@@ -46,14 +100,94 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarResponse'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      team:
+                        type: string
+                      year:
+                        type: string
+                      engine_regulation:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          years:
+                            type: array
+                            items:
+                              type: string
+                          induction:
+                            type: array
+                            items:
+                              type: string
+                              enum:
+                                - forced
+                                - natural
+                          number_of_pistons:
+                            type: number
+                            examples:
+                              - 12
+                          layout:
+                            type: string
+                          bank_angle:
+                            type: number
+                            examples:
+                              - 90
+                          engineDisplacement:
+                            type: number
+                            examples:
+                              - 1.6
+                          engineType:
+                            type: string
+                            examples:
+                              - forced or natural
+                          max_displacement:
+                            type: array
+                            examples:
+                              - 2.6
+                            items:
+                              type: number
+                          rev_limit:
+                            type: number
+                            examples:
+                              - 19000
+                            nullable: true
+                      length:
+                        type: number
+                      width:
+                        type: number
+                      height:
+                        type: number
+                      weight:
+                        type: number
+                      tyre:
+                        type: string
+                      wheelbase:
+                        type: number
         '406':
           description: Not acceptable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
     post:
       tags:
         - cars
@@ -64,7 +198,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CarRequest'
+              type: object
+              properties:
+                team:
+                  type: string
+                year:
+                  type: string
+                length:
+                  type: number
+                width:
+                  type: number
+                height:
+                  type: number
+                weight:
+                  type: number
+                tyre:
+                  type: string
         required: true
       responses:
         '201':
@@ -72,20 +221,110 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarResponse'
-        '415':
-          description: Unsupported Media Type (for accept)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      team:
+                        type: string
+                      year:
+                        type: string
+                      engine_regulation:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          years:
+                            type: array
+                            items:
+                              type: string
+                          induction:
+                            type: array
+                            items:
+                              type: string
+                              enum:
+                                - forced
+                                - natural
+                          number_of_pistons:
+                            type: number
+                            examples:
+                              - 12
+                          layout:
+                            type: string
+                          bank_angle:
+                            type: number
+                            examples:
+                              - 90
+                          engineDisplacement:
+                            type: number
+                            examples:
+                              - 1.6
+                          engineType:
+                            type: string
+                            examples:
+                              - forced or natural
+                          max_displacement:
+                            type: array
+                            examples:
+                              - 2.6
+                            items:
+                              type: number
+                          rev_limit:
+                            type: number
+                            examples:
+                              - 19000
+                            nullable: true
+                      length:
+                        type: number
+                      width:
+                        type: number
+                      height:
+                        type: number
+                      weight:
+                        type: number
+                      tyre:
+                        type: string
+                      wheelbase:
+                        type: number
         '406':
           description: Not acceptable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
+        '415':
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
   /cars/{carId}:
     get:
       tags:
@@ -107,20 +346,112 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarsResponse'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        team:
+                          type: string
+                        year:
+                          type: string
+                        engine_regulation:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            years:
+                              type: array
+                              items:
+                                type: string
+                            induction:
+                              type: array
+                              items:
+                                type: string
+                                enum:
+                                  - forced
+                                  - natural
+                            number_of_pistons:
+                              type: number
+                              examples:
+                                - 12
+                            layout:
+                              type: string
+                            bank_angle:
+                              type: number
+                              examples:
+                                - 90
+                            engineDisplacement:
+                              type: number
+                              examples:
+                                - 1.6
+                            engineType:
+                              type: string
+                              examples:
+                                - forced or natural
+                            max_displacement:
+                              type: array
+                              examples:
+                                - 2.6
+                              items:
+                                type: number
+                            rev_limit:
+                              type: number
+                              examples:
+                                - 19000
+                              nullable: true
+                        length:
+                          type: number
+                        width:
+                          type: number
+                        height:
+                          type: number
+                        weight:
+                          type: number
+                        tyre:
+                          type: string
+                        wheelbase:
+                          type: number
         '404':
           description: Car with ID not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
         '406':
           description: Not acceptable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
     put:
       tags:
         - cars
@@ -139,7 +470,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CarRequest'
+              type: object
+              properties:
+                team:
+                  type: string
+                year:
+                  type: string
+                length:
+                  type: number
+                width:
+                  type: number
+                height:
+                  type: number
+                weight:
+                  type: number
+                tyre:
+                  type: string
         required: true
       responses:
         '200':
@@ -147,26 +493,126 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarResponse'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      team:
+                        type: string
+                      year:
+                        type: string
+                      engine_regulation:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          years:
+                            type: array
+                            items:
+                              type: string
+                          induction:
+                            type: array
+                            items:
+                              type: string
+                              enum:
+                                - forced
+                                - natural
+                          number_of_pistons:
+                            type: number
+                            examples:
+                              - 12
+                          layout:
+                            type: string
+                          bank_angle:
+                            type: number
+                            examples:
+                              - 90
+                          engineDisplacement:
+                            type: number
+                            examples:
+                              - 1.6
+                          engineType:
+                            type: string
+                            examples:
+                              - forced or natural
+                          max_displacement:
+                            type: array
+                            examples:
+                              - 2.6
+                            items:
+                              type: number
+                          rev_limit:
+                            type: number
+                            examples:
+                              - 19000
+                            nullable: true
+                      length:
+                        type: number
+                      width:
+                        type: number
+                      height:
+                        type: number
+                      weight:
+                        type: number
+                      tyre:
+                        type: string
+                      wheelbase:
+                        type: number
         '404':
           description: Car with ID not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '415':
-          description: Unsupported Media Type (for accept)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
         '406':
           description: Not acceptable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
+        '415':
+          description: Unsupported Media Type (for accept)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
     delete:
       tags:
         - cars
@@ -187,14 +633,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EmptySuccess'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
         '404':
           description: Car with ID not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
   /engines:
     get:
       tags:
@@ -208,20 +673,91 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EnginesResponse'
-        '415':
-          description: Not acceptable (for content type)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        years:
+                          type: array
+                          items:
+                            type: string
+                        induction:
+                          type: array
+                          items:
+                            type: string
+                            enum:
+                              - forced
+                              - natural
+                        number_of_pistons:
+                          type: number
+                          examples:
+                            - 12
+                        layout:
+                          type: string
+                        bank_angle:
+                          type: number
+                          examples:
+                            - 90
+                        engineDisplacement:
+                          type: number
+                          examples:
+                            - 1.6
+                        engineType:
+                          type: string
+                          examples:
+                            - forced or natural
+                        max_displacement:
+                          type: array
+                          examples:
+                            - 2.6
+                          items:
+                            type: number
+                        rev_limit:
+                          type: number
+                          examples:
+                            - 19000
+                          nullable: true
         '406':
           description: Unsupported Media Type (for accept)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
+        '415':
+          description: Not acceptable (for content type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
   /engines/{engineId}:
     get:
       tags:
@@ -243,20 +779,91 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EnginesResponse'
-        '415':
-          description: Not acceptable (for content type)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        years:
+                          type: array
+                          items:
+                            type: string
+                        induction:
+                          type: array
+                          items:
+                            type: string
+                            enum:
+                              - forced
+                              - natural
+                        number_of_pistons:
+                          type: number
+                          examples:
+                            - 12
+                        layout:
+                          type: string
+                        bank_angle:
+                          type: number
+                          examples:
+                            - 90
+                        engineDisplacement:
+                          type: number
+                          examples:
+                            - 1.6
+                        engineType:
+                          type: string
+                          examples:
+                            - forced or natural
+                        max_displacement:
+                          type: array
+                          examples:
+                            - 2.6
+                          items:
+                            type: number
+                        rev_limit:
+                          type: number
+                          examples:
+                            - 19000
+                          nullable: true
         '406':
           description: Unsupported Media Type (for accept)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
+        '415':
+          description: Not acceptable (for content type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
   /engines/{engineId}/cars:
     get:
       tags:
@@ -278,20 +885,112 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarsResponse'
-        '415':
-          description: Not acceptable (for content type)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        team:
+                          type: string
+                        year:
+                          type: string
+                        engine_regulation:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            years:
+                              type: array
+                              items:
+                                type: string
+                            induction:
+                              type: array
+                              items:
+                                type: string
+                                enum:
+                                  - forced
+                                  - natural
+                            number_of_pistons:
+                              type: number
+                              examples:
+                                - 12
+                            layout:
+                              type: string
+                            bank_angle:
+                              type: number
+                              examples:
+                                - 90
+                            engineDisplacement:
+                              type: number
+                              examples:
+                                - 1.6
+                            engineType:
+                              type: string
+                              examples:
+                                - forced or natural
+                            max_displacement:
+                              type: array
+                              examples:
+                                - 2.6
+                              items:
+                                type: number
+                            rev_limit:
+                              type: number
+                              examples:
+                                - 19000
+                              nullable: true
+                        length:
+                          type: number
+                        width:
+                          type: number
+                        height:
+                          type: number
+                        weight:
+                          type: number
+                        tyre:
+                          type: string
+                        wheelbase:
+                          type: number
         '406':
           description: Unsupported Media Type (for accept)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
+        '415':
+          description: Not acceptable (for content type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  response:
+                    type: string
+                    examples:
+                      - null
+                    nullable: true
 components:
   schemas:
     Error:
@@ -306,7 +1005,6 @@ components:
           examples:
             - null
           nullable: true
-
     EmptySuccess:
       type: object
       properties:
@@ -319,7 +1017,6 @@ components:
           examples:
             - null
           nullable: true
-
     CarsResponse:
       type: object
       properties:
@@ -330,8 +1027,71 @@ components:
         response:
           type: array
           items:
-            $ref: "#/components/schemas/Car"
-
+            type: object
+            properties:
+              id:
+                type: string
+              team:
+                type: string
+              year:
+                type: string
+              engine_regulation:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  years:
+                    type: array
+                    items:
+                      type: string
+                  induction:
+                    type: array
+                    items:
+                      type: string
+                      enum:
+                        - forced
+                        - natural
+                  number_of_pistons:
+                    type: number
+                    examples:
+                      - 12
+                  layout:
+                    type: string
+                  bank_angle:
+                    type: number
+                    examples:
+                      - 90
+                  engineDisplacement:
+                    type: number
+                    examples:
+                      - 1.6
+                  engineType:
+                    type: string
+                    examples:
+                      - forced or natural
+                  max_displacement:
+                    type: array
+                    examples:
+                      - 2.6
+                    items:
+                      type: number
+                  rev_limit:
+                    type: number
+                    examples:
+                      - 19000
+                    nullable: true
+              length:
+                type: number
+              width:
+                type: number
+              height:
+                type: number
+              weight:
+                type: number
+              tyre:
+                type: string
+              wheelbase:
+                type: number
     CarResponse:
       type: object
       properties:
@@ -340,8 +1100,71 @@ components:
         message:
           type: string
         response:
-          $ref: "#/components/schemas/Car"
-
+          type: object
+          properties:
+            id:
+              type: string
+            team:
+              type: string
+            year:
+              type: string
+            engine_regulation:
+              type: object
+              properties:
+                id:
+                  type: string
+                years:
+                  type: array
+                  items:
+                    type: string
+                induction:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - forced
+                      - natural
+                number_of_pistons:
+                  type: number
+                  examples:
+                    - 12
+                layout:
+                  type: string
+                bank_angle:
+                  type: number
+                  examples:
+                    - 90
+                engineDisplacement:
+                  type: number
+                  examples:
+                    - 1.6
+                engineType:
+                  type: string
+                  examples:
+                    - forced or natural
+                max_displacement:
+                  type: array
+                  examples:
+                    - 2.6
+                  items:
+                    type: number
+                rev_limit:
+                  type: number
+                  examples:
+                    - 19000
+                  nullable: true
+            length:
+              type: number
+            width:
+              type: number
+            height:
+              type: number
+            weight:
+              type: number
+            tyre:
+              type: string
+            wheelbase:
+              type: number
     CarRequest:
       type: object
       properties:
@@ -359,7 +1182,6 @@ components:
           type: number
         tyre:
           type: string
-
     Car:
       type: object
       properties:
@@ -370,7 +1192,50 @@ components:
         year:
           type: string
         engine_regulation:
-          $ref: "#/components/schemas/Engine"
+          type: object
+          properties:
+            id:
+              type: string
+            years:
+              type: array
+              items:
+                type: string
+            induction:
+              type: array
+              items:
+                type: string
+                enum:
+                  - forced
+                  - natural
+            number_of_pistons:
+              type: number
+              examples:
+                - 12
+            layout:
+              type: string
+            bank_angle:
+              type: number
+              examples:
+                - 90
+            engineDisplacement:
+              type: number
+              examples:
+                - 1.6
+            engineType:
+              type: string
+              examples:
+                - forced or natural
+            max_displacement:
+              type: array
+              examples:
+                - 2.6
+              items:
+                type: number
+            rev_limit:
+              type: number
+              examples:
+                - 19000
+              nullable: true
         length:
           type: number
         width:
@@ -381,7 +1246,8 @@ components:
           type: number
         tyre:
           type: string
-
+        wheelbase:
+          type: number
     EngineResponse:
       type: object
       properties:
@@ -390,8 +1256,50 @@ components:
         message:
           type: string
         response:
-          $ref: "#/components/schemas/Engine"
-
+          type: object
+          properties:
+            id:
+              type: string
+            years:
+              type: array
+              items:
+                type: string
+            induction:
+              type: array
+              items:
+                type: string
+                enum:
+                  - forced
+                  - natural
+            number_of_pistons:
+              type: number
+              examples:
+                - 12
+            layout:
+              type: string
+            bank_angle:
+              type: number
+              examples:
+                - 90
+            engineDisplacement:
+              type: number
+              examples:
+                - 1.6
+            engineType:
+              type: string
+              examples:
+                - forced or natural
+            max_displacement:
+              type: array
+              examples:
+                - 2.6
+              items:
+                type: number
+            rev_limit:
+              type: number
+              examples:
+                - 19000
+              nullable: true
     EnginesResponse:
       type: object
       properties:
@@ -402,8 +1310,50 @@ components:
         response:
           type: array
           items:
-            $ref: "#/components/schemas/Engine"
-
+            type: object
+            properties:
+              id:
+                type: string
+              years:
+                type: array
+                items:
+                  type: string
+              induction:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - forced
+                    - natural
+              number_of_pistons:
+                type: number
+                examples:
+                  - 12
+              layout:
+                type: string
+              bank_angle:
+                type: number
+                examples:
+                  - 90
+              engineDisplacement:
+                type: number
+                examples:
+                  - 1.6
+              engineType:
+                type: string
+                examples:
+                  - forced or natural
+              max_displacement:
+                type: array
+                examples:
+                  - 2.6
+                items:
+                  type: number
+              rev_limit:
+                type: number
+                examples:
+                  - 19000
+                nullable: true
     Engine:
       type: object
       properties:
@@ -430,6 +1380,14 @@ components:
           type: number
           examples:
             - 90
+        engineDisplacement:
+          type: number
+          examples:
+            - 1.6
+        engineType:
+          type: string
+          examples:
+            - forced or natural
         max_displacement:
           type: array
           examples:
@@ -440,4 +1398,49 @@ components:
           type: number
           examples:
             - 19000
+          nullable: true
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+        username:
+          type: string
+        displayName:
+          type: string
+        token:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          type: object
+          properties:
+            id:
+              type: string
+            provider:
+              type: string
+            username:
+              type: string
+            displayName:
+              type: string
+            token:
+              type: string
+    LogoutResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        response:
+          type: string
+          examples:
+            - null
           nullable: true
