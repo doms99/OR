@@ -1,5 +1,5 @@
 var { getDb } = require("./db");
-var constants = require('./constants/constants.json');
+var constants = require('../constants/constants');
 const crypto = require("crypto");
 
 async function getObject(query) {
@@ -24,13 +24,13 @@ async function getObject(query) {
     }
 
     if(query.all != undefined) {
-      for(const [key, value] of Object.entries(engine)) {
+      for(const value of Object.values(engine)) {
         if(`${value}`.includes(query.all)) {
           res.push(car);
           continue outer;
         }
       }
-      for(const [key, value] of Object.entries(car)) {
+      for(const value of Object.value(car)) {
 
         if(`${value}`.includes(query.all)) {
           res.push(car);
@@ -77,7 +77,9 @@ async function getCars() {
   for (const car of cars) {
     delete car._id;
     car.engine_regulation = await getEngine(car.engine_regulation);
-    delete car.engine_regulation._id;
+    if(car.engine_regulation?._id != null) {
+      delete car.engine_regulation._id;
+    }
   }
 
   return cars;
@@ -93,37 +95,30 @@ async function getCar(id) {
 
   delete car._id;
   car.engine_regulation = await getEngine(car.engine_regulation);
-  delete car.engine_regulation._id;
+  if(car.engine_regulation?._id != null) {
+    delete car.engine_regulation._id;
+  }
 
   return car;
 }
 
 async function insertCar(car) {
   const db = getDb();
-  crypto.randomBytes
   let id;
-
-  while(true) {
-    id = crypto.randomBytes(16).toString("hex");
-    if(await carsCollection.findOne({id: car.id}) == null) break;
-  }
 
   const carsCollection = db.collection(constants.cars_name);
 
-  await carsCollection.deleteOne({id: id});
+  while(await carsCollection.findOne({id}) != null) {
+    id = crypto.randomBytes(16).toString("hex");
+  }
+
   await carsCollection.insertOne({
     ...car,
     id: id,
-    engine_regulation: await getEngineForYear(car.year)?.id
+    engine_regulation: (await getEngineForYear(car.year))?.id
   });
 
-  const carR = await carsCollection.findOne({id: id});
-
-  delete carR._id;
-  carR.engine_regulation = await getEngine(carR.engine_regulation);
-  delete carR.engine_regulation._id;
-
-  return carR;
+  return getCar(id);
 }
 
 async function updateCar(id, car) {
@@ -136,16 +131,18 @@ async function updateCar(id, car) {
   await carsCollection.insertOne({
     ...carDb,
     ...car,
-    engine_regulation: await getEngineForYear(car.year)?.id
+    engine_regulation: (await getEngineForYear(car.year))?.id
   });
+
+  return getCar(id);
 }
 
 async function deleteCar(id) {
   const db = getDb();
 
-  const enginesCollection = db.collection(constants.engines_name);
+  const carsCollection = db.collection(constants.cars_name);
 
-  const result = await enginesCollection.deleteOne({id: id});
+  const result = await carsCollection.deleteOne({id: id});
 
   return result.deletedCount > 0;
 }
@@ -161,7 +158,9 @@ async function getCarsForEngine(engineId) {
   for (const car of cars) {
     delete car._id;
     car.engine_regulation = await getEngine(car.engine_regulation);
-    delete car.engine_regulation._id;
+    if(car.engine_regulation?._id != null) {
+      delete car.engine_regulation._id;
+    }
   }
 
   return cars;
@@ -206,4 +205,35 @@ async function getEngine(id) {
   return engine;
 }
 
-module.exports = { getObject, getCars, getCar, insertCar, updateCar, deleteCar, getCarsForEngine, getEngines, getEngine }
+async function updateUser({ provider, id, username, displayName, token, tokenSecret }) {
+  const db = getDb();
+
+  const usersCollection = db.collection(constants.users_name);
+  await usersCollection.insertOne({ provider, id, username, displayName, token, tokenSecret });
+
+  const user = await usersCollection.findOne({ provider, id });
+  delete user._id;
+  delete user.tokenSecret;
+
+  return user;
+}
+
+async function deleteUser({ provider, id }) {
+  const db = getDb();
+
+  const usersCollection = db.collection(constants.users_name);
+  await usersCollection.deleteOne({ provider, id });
+}
+
+async function getUser(token) {
+  const db = getDb();
+
+  const usersCollection = db.collection(constants.users_name);
+  const user = await usersCollection.findOne({token});
+  delete user._id;
+  delete user.tokenSecret;
+
+  return user;
+}
+
+module.exports = { getObject, getCars, getCar, insertCar, updateCar, deleteCar, getCarsForEngine, getEngines, getEngine, updateUser, deleteUser, getUser }

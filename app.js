@@ -1,10 +1,10 @@
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var { connectToDb } = require("./db/db");
-
+var passport = require('passport');
+var passport_init = require('./passport');
 var indexRouter = require('./routes/index');
 var datatableRouter = require('./routes/datatable');
 var apiRouter = require('./routes/api/api');
@@ -25,13 +25,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public', 'datatable')));
+app.use(require('express-session')({
+  secret: 'or_lab_4',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { path: '/', httpOnly: true, secure: false, maxAge: 172800 }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport_init();
 
 app.use('/', indexRouter);
 app.use('/datatable', datatableRouter);
 app.use('/api/v1', apiRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function(req, res) {
   sendErrorResponse(res, {
     statusCode: StatusCodes.NOT_FOUND,
     responseStatus: ReasonPhrases.NOT_FOUND,
@@ -40,7 +49,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

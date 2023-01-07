@@ -7,7 +7,7 @@ var {
 } = require('http-status-codes');
 var router = express.Router();
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     responseStatus: ReasonPhrases.OK,
@@ -28,7 +28,7 @@ router.use('/:id', async function(req, res, next) {
   next();
 });
 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id', async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     responseStatus: ReasonPhrases.OK,
@@ -37,12 +37,20 @@ router.get('/:id', async function(req, res, next) {
   });
 });
 
-router.get('/:id/cars', async function(req, res, next) {
+router.get('/:id/cars', async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     responseStatus: ReasonPhrases.OK,
     message: 'Car fetched successfully',
     response: await getCarsForEngine(req.params.id),
+  });
+});
+
+router.all('*', function(req, res) {
+  sendErrorResponse(res, {
+    statusCode: StatusCodes.METHOD_NOT_ALLOWED,
+    responseStatus: ReasonPhrases.METHOD_NOT_ALLOWED,
+    message: `Car with id ${req.params.id} not found`,
   });
 });
 

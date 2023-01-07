@@ -2,7 +2,7 @@ function sendErrorResponse(res, obj) {
   return res.status(obj.statusCode).json({
     status: obj.responseStatus,
     message: obj.message,
-    response: null,
+    response: obj.response ?? null,
   });
 }
 

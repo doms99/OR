@@ -1,13 +1,14 @@
 var express = require('express');
-const { getCars, getCar, insertCar, deleteCar } = require('../../db');
+const { getCars, getCar, insertCar, deleteCar, updateCar } = require('../../db');
 const { sendErrorResponse, sendResponse } = require('./util/responseBuilder');
 var {
 	ReasonPhrases,
 	StatusCodes
 } = require('http-status-codes');
+const authChecker = require('./util/authChecker');
 var router = express.Router();
 
-router.get('/', async function(req, res, next) {
+router.get('/', async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     responseStatus: ReasonPhrases.OK,
@@ -16,7 +17,7 @@ router.get('/', async function(req, res, next) {
   });
 });
 
-router.post('/', async function(req, res, next) {
+router.post('/', authChecker, async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     responseStatus: ReasonPhrases.CREATED,
@@ -37,7 +38,7 @@ router.use('/:id', async function(req, res, next) {
   next();
 });
 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id', async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     responseStatus: ReasonPhrases.OK,
@@ -46,16 +47,16 @@ router.get('/:id', async function(req, res, next) {
   });
 });
 
-router.put('/:id', async function(req, res, next) {
+router.put('/:id', authChecker, async function(req, res) {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     responseStatus: ReasonPhrases.OK,
     message: 'Car updated successfully',
-    response: await insertCar(req.params.id, req.body),
+    response: await updateCar(req.params.id, req.body),
   });
 });
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id', authChecker, async function(req, res) {
   await deleteCar(req.params.id);
 
   sendResponse(res, {
@@ -63,6 +64,14 @@ router.delete('/:id', async function(req, res, next) {
     responseStatus: ReasonPhrases.OK,
     message: 'Car deleted successfully',
     response: null,
+  });
+});
+
+router.all('*', function(req, res) {
+  sendErrorResponse(res, {
+    statusCode: StatusCodes.METHOD_NOT_ALLOWED,
+    responseStatus: ReasonPhrases.METHOD_NOT_ALLOWED,
+    message: `Car with id ${req.params.id} not found`,
   });
 });
 

@@ -4,10 +4,31 @@ var {
 	ReasonPhrases,
 	StatusCodes
 } = require('http-status-codes');
+const { sendErrorResponse } = require('./util/responseBuilder');
 
 var carsRouter = require('./cars');
 var enginesRouter = require('./engines');
-const { sendErrorResponse } = require('./util/responseBuilder');
+var authRouter = require('./auth');
+const { getUser } = require('../../db');
+
+router.use('*', async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if(authHeader === undefined) {
+    next();
+    return;
+  }
+
+  const authSplit = authHeader.trim().split(/\s+/);
+  if(authSplit.length != 2 || authSplit[0] != 'Bearer') {
+    next();
+    return;
+  }
+
+  req.myUser = await getUser(authSplit[1]);
+  next();
+});
+
+router.use('/', authRouter);
 
 router.use('/', function(req, res, next) {
   if(req.headers['accept'] && req.headers['accept'] != 'application/json') {
